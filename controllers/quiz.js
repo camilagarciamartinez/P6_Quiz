@@ -4,7 +4,7 @@ const {models} = require("../models");
 // Autoload the quiz with id equals to :quizId
 exports.load = (req, res, next, quizId) => {
 
-    models.quiz.findById(quizId)
+    models.quizzes.findById(quizId)
     .then(quiz => {
         if (quiz) {
             req.quiz = quiz;
@@ -20,7 +20,7 @@ exports.load = (req, res, next, quizId) => {
 // GET /quizzes
 exports.index = (req, res, next) => {
 
-    models.quiz.findAll()
+    models.quizzes.findAll()
     .then(quizzes => {
         res.render('quizzes/index.ejs', {quizzes});
     })
@@ -53,7 +53,7 @@ exports.create = (req, res, next) => {
 
     const {question, answer} = req.body;
 
-    const quiz = models.quiz.build({
+    const quiz = models.quizzes.build({
         question,
         answer
     });
@@ -151,21 +151,6 @@ exports.check = (req, res, next) => {
         quiz,
         result,
         answer
-    });
-};
-
-// GET /quizzes/:quizId/check
-exports.check = (req, res, next) => {
-
-    const {quiz, query} = req;
-
-    const answer = query.answer || "";
-    const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
-
-    res.render('quizzes/result', {
-        quiz,
-        result,
-        answer
     })
 };
 
@@ -194,7 +179,7 @@ exports.randomplay = (req, res, next) => {
         
         
         if (resp) {
-        
+            // creo un array de ids
             var ids = []
             var y
             for (y = 0; y<resp.length; y++) {
@@ -272,3 +257,4 @@ exports.randomcheck = (req, res, next) => {
     })
     .catch(error => next(error));
 }
+
